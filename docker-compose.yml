@@ -1,0 +1,32 @@
+version: '3.6'
+networks:
+  kvwmap_prod:
+    name: $NetworksName
+    ipam:
+      driver: default
+      config:
+        - subnet: "$IpAddress"
+services:
+  nginx:
+    hostname: nginx
+    image: $ImageName
+    networks:
+      - default
+      - $NetworksName
+    ports:
+      - "$DockerHTTPPort:$HostHTTPPort"
+      - "$DockerHTTPSPort:$HostHTTPSPort"
+    volumes:
+      - nginx:$NginxDestinationPath
+      - www:$WWWDestinationPath
+      - letsencrypt:$LetsDestinationPath
+      - logs:$LogsDestinationPath
+volumes:
+  letsencrypt:
+    external: true 
+  nginx:
+    external: true
+  logs:
+    external: true
+  www:
+    external: true
